@@ -18,7 +18,7 @@ WORK_DIR=$1
 
 ############################
 
-echo "start milestone"
+echo "START MILESTONE PROCESS"
 echo 
 echo "change directory to $WORK_DIR"
 cd $WORK_DIR
@@ -58,3 +58,5 @@ PROJECT_VERSION_CURRENT=$(mvn help:evaluate -Dexpression=project.version -q -Dfo
 
 echo "commit version changes"
 git add pom.xml && git commit -m"Change the project version ${PROJECT_VERSION_OLD} => ${PROJECT_VERSION_CURRENT}" && git push
+
+echo "MILESTONE PROCESS WAS FINISHED"
