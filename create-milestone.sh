@@ -1,5 +1,7 @@
-############################
-# print comands
+###############################################################
+#######   terminal settings   #################################
+###############################################################
+
 echo "set printing commands"
 set -x
 
@@ -7,16 +9,31 @@ set -x
 echo "set exit script if error"
 set -e
 
-############################
-### Define variables #######
-############################
+###############################################################
+#######   Define variables   ##################################
+###############################################################
 # create milestone
 DEV_BRANCH=dev
 MILESTONE_BRANCH=milestone
 
 WORK_DIR=$1
+CALL_FUNCTION=$2
 
-############################
+###############################################################
+#######   FUNCTIONS   #########################################
+###############################################################
+
+test () {
+    echo "test run milestone in $WORK_DIR"
+    exit 0
+}
+
+###############################################################
+#######   MAIN PROCESS   ######################################
+###############################################################
+
+# run a function if a name is passed
+$CALL_FUNCTION
 
 echo "START MILESTONE PROCESS"
 echo 
@@ -60,3 +77,7 @@ echo "commit version changes"
 git add pom.xml && git commit -m"Change the project version ${PROJECT_VERSION_OLD} => ${PROJECT_VERSION_CURRENT}" && git push
 
 echo "MILESTONE PROCESS WAS FINISHED"
+
+
+###############################################################
+
