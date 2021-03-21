@@ -34,7 +34,7 @@ echo "switch branch to $DEV_BRANCH and pull changes from server"
 git checkout $DEV_BRANCH && git pull -p -r
 
 echo "remove origin $MILESTONE_BRANCH if exists"
-[ ! -z $(git branch -a | grep "remotes/origin/$MILESTONE_BRANCH" || true) ] && git push -D origin $MILESTONE_BRANCH
+[ ! -z $(git branch -a | grep "remotes/origin/$MILESTONE_BRANCH" || true) ] && git push -f -d origin $MILESTONE_BRANCH
 
 echo "remove local $MILESTONE_BRANCH if exists"
 [ ! -z $(git branch | grep "$MILESTONE_BRANCH" || true) ] && git branch -D $MILESTONE_BRANCH
@@ -43,7 +43,7 @@ echo "create a new $MILESTONE_BRANCH and push it"
 git checkout -b $MILESTONE_BRANCH && git push -u origin $MILESTONE_BRANCH
 
 echo "switch branch to $DEV_BRANCH"
-git chechout $DEV_BRANCH
+git checkout $DEV_BRANCH
 
 echo "get old project version"
 PROJECT_VERSION_OLD=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
