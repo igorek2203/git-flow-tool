@@ -15,7 +15,7 @@ set -e
 # create release
 DEV_BRANCH=dev
 MILESTONE_BRANCH=milestone
-RELASE_BRANCH=main
+RELEASE_BRANCH=main
 
 WORK_DIR=$1
 CALL_FUNCTION=$2
@@ -51,14 +51,22 @@ git add . && git stash
 echo "switch branch to $MILESTONE_BRANCH and pull changes from server"
 git checkout $MILESTONE_BRANCH && git pull -p -r
 
-# TODO: remove snapshots
+echo "switch branch to $RELEASE_BRANCH and pull changes from server"
+git checkout $RELEASE_BRANCH && git pull -p -r
 
-echo "switch branch to $RELASE_BRANCH and pull changes from server"
-git checkout $RELASE_BRANCH && git pull -p -r
-
-echo "merge $MILESTONE_BRANCH into $RELASE_BRANCH"
+echo "merge $MILESTONE_BRANCH into $RELEASE_BRANCH"
 git merge --no-ff --no-commit -s recursive -X theirs $MILESTONE_BRANCH 
 
+# TODO: remove all snapshots
+mvn versions:set -DremoveSnapshot
+mvn versions:use-releases
+mvn versions:update-properties -DallowIncrementalUpdates=false -DallowMajorUpdates=false -DallowMinorUpdates=false
+
+echo "get new project version"
+PROJECT_VERSION_NEW=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+
+echo "commit release"
+git commit -m"release ${PROJECT_VERSION_NEW}" && git push
 
 echo "RELEASE PROCESS WAS FINISHED"
 
