@@ -61,12 +61,13 @@ git merge --no-ff --no-commit -s recursive -X theirs $MILESTONE_BRANCH
 mvn versions:set -DremoveSnapshot
 mvn versions:use-releases
 mvn versions:update-properties -DallowIncrementalUpdates=false -DallowMajorUpdates=false -DallowMinorUpdates=false
+mvn versions:commit
 
 echo "get new project version"
 PROJECT_VERSION_NEW=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 echo "commit release"
-git commit -m"release ${PROJECT_VERSION_NEW}" && git push
+git add . && git commit -m"release ${PROJECT_VERSION_NEW}" && git push
 
 echo "RELEASE PROCESS WAS FINISHED"
 
